@@ -10,7 +10,10 @@ import { styled } from "styled-components";
 
 const ColumnsWrapper = styled.div`
     display: grid;
-    grid-template-columns: 1.3fr .7fr;
+    grid-template-columns: 1fr;
+    @media screen and (min-width: 768px) {
+        grid-template-columns: 1.2fr .8fr;
+    }
     gap: 40px;
     margin-top: 40px;
 `
@@ -26,22 +29,30 @@ const ProductInfoCell = styled.td`
 `
 
 const ProductImageBox = styled.div`
-    max-width: 150px;
-    max-height: 150px;
-    padding: 10px;
+    width: 150px;
+    height: 100%;
+    padding: 2px;
     border: 1px solid rgba(0, 0, 0, .1);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
     img {
         max-width: 150px;
         max-height: 150px;
     }
+    @media screen and (min-width: 768px) {
+        padding: 10px;
+        width: 100px;
+    }
 `
 
 const QuantityLabel = styled.span`
-    padding: 0 3px;
+    padding: 0 15px;
+    display: block;
+    @media screen and (min-width: 768px) {
+        display: inline-block;
+        padding: 0 10px;
+    }
 `
 
 const CityHolder = styled.div`
@@ -50,7 +61,7 @@ const CityHolder = styled.div`
 `
 
 export default function CartPage() {
-    const { cartProducts, addProduct, removeProduct } = useContext(CartContext)
+    const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext)
     const [products, setProducts] = useState([])
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -58,6 +69,7 @@ export default function CartPage() {
     const [postalCode, setPostalCode] = useState('')
     const [streetAddress, setStreetAddress] = useState('')
     const [country, setCountry] = useState('')
+    const [isSuccess, setIsSuccess] = useState(false)
     useEffect(() => {
         if (cartProducts.length > 0) {
             axios.post('/api/cart', { ids: cartProducts }).then(response => { setProducts(response.data) })
@@ -65,6 +77,15 @@ export default function CartPage() {
             setProducts([])
         }
     }, [cartProducts])
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return
+        }
+        if (window?.location.href.includes('success')) {
+            setIsSuccess(true)
+            clearCart()
+        }
+    }, [])
     function moreOfThisProduct(id) {
         addProduct(id)
     }
@@ -90,6 +111,23 @@ export default function CartPage() {
         const price = products.find(p => p._id === productId)?.price || 0
         total += price
     }
+
+    if (isSuccess) {
+        return (
+            <>
+                <Header />
+                <Center>
+                    <ColumnsWrapper>
+                        <Box>
+                            <h1>Thanks for your order!</h1>
+                            <p>We will email you when your order will be sent.</p>
+                        </Box>
+                    </ColumnsWrapper>
+                </Center>
+            </>
+        )
+    }
+
     return (
         <>
             <Header />
