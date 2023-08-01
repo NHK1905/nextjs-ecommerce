@@ -79,7 +79,7 @@ export default function Featured({ product }) {
                         </div>
                     </Column>
                     <Column>
-                        <img src="https://nhk-nextjs-ecommerce.s3.amazonaws.com/1690216792064.png" />
+                        <img src="https://nhk-nextjs-ecommerce.s3.amazonaws.com/1692209098331.png" />
                     </Column>
                 </ColumnWrapper>
             </Center>
