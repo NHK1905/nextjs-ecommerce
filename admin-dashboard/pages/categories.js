@@ -120,7 +120,7 @@ function CategoriesPages({ swal }) {
                     >
                         <option value="">No parent category</option>
                         {categories.length > 0 && categories.map(category => (
-                            <option value={category._id}>{category.name}</option>
+                            <option key={category} value={category._id}>{category.name}</option>
                         )
                         )}
                     </select>
@@ -135,7 +135,7 @@ function CategoriesPages({ swal }) {
                         Add new property
                     </button>
                     {properties.length > 0 && properties.map((property, index) => (
-                        <div className="flex gap-1 mb-2">
+                        <div className="flex gap-1 mb-2" key={property}>
                             <input
                                 className="mb-0"
                                 type="text"
@@ -200,7 +200,7 @@ function CategoriesPages({ swal }) {
                     </thead>
                     <tbody>
                         {categories.length > 0 && categories.map(category => (
-                            <tr>
+                            <tr key={category}>
                                 <td>{category.name}</td>
                                 <td>
                                     {category?.parent?.name}
